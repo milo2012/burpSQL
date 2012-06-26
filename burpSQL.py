@@ -50,8 +50,6 @@ proxylog = gds.pub.burp.parse(options.filename)
 for i in proxylog:
 	if(i.get_request_method()=='GET'):
 		if options.domain!=None:
-			print options.domain
-
 			if options.domain.lower() in i.host.lower():
 				if options.cookie==None:
 					cookie=i.get_request_header('Cookie')
@@ -69,12 +67,10 @@ for i in proxylog:
 			url = i.host+i.get_request_path()
 			if(len(i.get_request_body())>0):
 				cmd = auto+"python "+sqlmapPath+" -u "+url+dbms+" --beep --data \""+i.get_request_body()+"\" --cookie=\""+cookie+"\""
-				print cmd
 				os.system(cmd)
 
 	if(i.get_request_method()=='POST'):	
 		if options.domain!=None:
-			print options.domain
 			if options.domain.lower() in i.host.lower():
 				if options.cookie==None:
 					cookie=i.get_request_header('Cookie')
@@ -83,7 +79,6 @@ for i in proxylog:
 				url = i.host+i.get_request_path()
 				if(len(i.get_request_body())>0):
 					cmd = auto+"python "+sqlmapPath+" -u "+url+dbms+" --beep --data \""+i.get_request_body()+"\" --cookie=\""+cookie+"\""
-					print cmd
 					os.system(cmd)
 		else:
 			if options.domain in i.host:
@@ -94,6 +89,5 @@ for i in proxylog:
 				url = i.host+i.get_request_path()
 				if(len(i.get_request_body())>0):
 					cmd = auto+"python "+sqlmapPath+" -u "+url+dbms+" --beep --data \""+i.get_request_body()+"\" --cookie=\""+cookie+"\""
-					print cmd
 					os.system(cmd)
 
