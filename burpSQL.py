@@ -12,13 +12,13 @@ auto=""
 
 parser = OptionParser()
 parser.add_option("-f", "--file", dest="filename",
-                  help="Burp proxy logfile", metavar="FILE")
+                  help="Burp proxy logfile", metavar="burpProxyFile")
 parser.add_option("-c", "--cookie", dest="cookie",
-                  help="Cookie to use", metavar="FILE")
+                  help="Cookie to use", metavar="cookieString")
 parser.add_option("-d", "--dbms", dest="dbms",
-                  help="Backend database", metavar="FILE")
+                  help="Backend database", metavar="database")
 parser.add_option("--domain", dest="domain",
-                  help="Domain name", metavar="FILE")
+                  help="Domain name", metavar="domainName")
 parser.add_option("-a", "--auto",
                   action="store_true", dest="auto", default=False,
                   help="Answer 'Yes' to all sqlmap questions")
