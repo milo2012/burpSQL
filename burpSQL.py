@@ -1,4 +1,5 @@
-/import gds.pub.burp
+#!/usr/bin/python
+import gds.pub.burp
 import os,sys
 from optparse import OptionParser
 
