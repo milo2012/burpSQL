@@ -57,7 +57,7 @@ for i in proxylog:
 					cookie=options.cookie
 				url = i.host+i.get_request_path()
 				if(len(i.get_request_body())>0):
-					cmd = auto+"python "+sqlmapPath+" -u "+url+dbms+" --beep --data \""+i.get_request_body()+"\" --cookie=\""+cookie+"\""
+					cmd = auto+"python "+sqlmapPath+" -u "+url+dbms+" --beep --data=\""+i.get_request_body()+"\" --cookie=\""+cookie+"\""
 					os.system(cmd)
 		else:
 			if options.cookie==None:
@@ -81,13 +81,12 @@ for i in proxylog:
 					cmd = auto+"python "+sqlmapPath+" -u "+url+dbms+" --beep --data \""+i.get_request_body()+"\" --cookie=\""+cookie+"\""
 					os.system(cmd)
 		else:
-			if options.domain in i.host:
-				if options.cookie==None:
-					cookie=i.get_request_header('Cookie')
-				else:
-					cookie=options.cookie
-				url = i.host+i.get_request_path()
-				if(len(i.get_request_body())>0):
-					cmd = auto+"python "+sqlmapPath+" -u "+url+dbms+" --beep --data \""+i.get_request_body()+"\" --cookie=\""+cookie+"\""
-					os.system(cmd)
+			if options.cookie==None:
+				cookie=i.get_request_header('Cookie')
+			else:
+				cookie=options.cookie
+			url = i.host+i.get_request_path()
+			if(len(i.get_request_body())>0):
+				cmd = auto+"python "+sqlmapPath+" -u "+url+dbms+" --beep --data \""+i.get_request_body()+"\" --cookie=\""+cookie+"\""
+				os.system(cmd)
 
