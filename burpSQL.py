@@ -2,7 +2,8 @@
 import gds.pub.burp
 import os,sys
 from optparse import OptionParser
-from pprint import pprint
+import subprocess
+import signal
 
 sqlmapPath="/pentest/database/sqlmap/sqlmap.py"
 
@@ -11,6 +12,8 @@ cookie=""
 filename=""
 auto=""
 urls={}
+
+signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
 parser = OptionParser()
 parser.add_option("-f", "--file", dest="filename",
@@ -92,5 +95,5 @@ for i in proxylog:
 					urls[i.get_request_body()]=cookie
 
 for k, v in sorted(urls.items()):	
-	cmd = auto+"python "+sqlmapPath+" -u "+url+dbms+" --beep --data=\""+k+"\" --cookie=\""+v+"\""
-	os.system(cmd)
+	cmd = auto+" /usr/bin/python "+sqlmapPath+" -u \""+url+"\""+dbms+" --threads 4 --beep --data=\""+k+"\" --cookie=\""+v+"\""
+	subprocess.call(cmd,shell=True)
