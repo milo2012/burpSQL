@@ -2,6 +2,7 @@
 import gds.pub.burp
 import os,sys
 from optparse import OptionParser
+from pprint import pprint
 
 sqlmapPath="/pentest/database/sqlmap/sqlmap.py"
 
@@ -9,6 +10,7 @@ dbms=""
 cookie=""
 filename=""
 auto=""
+urls={}
 
 parser = OptionParser()
 parser.add_option("-f", "--file", dest="filename",
@@ -57,8 +59,8 @@ for i in proxylog:
 					cookie=options.cookie
 				url = i.host+i.get_request_path()
 				if(len(i.get_request_body())>0):
-					cmd = auto+"python "+sqlmapPath+" -u "+url+dbms+" --beep --data=\""+i.get_request_body()+"\" --cookie=\""+cookie+"\""
-					os.system(cmd)
+					if i.get_request_body() not in urls:
+						urls[i.get_request_body()]=cookie
 		else:
 			if options.cookie==None:
 				cookie=i.get_request_header('Cookie')
@@ -66,9 +68,8 @@ for i in proxylog:
 				cookie=options.cookie
 			url = i.host+i.get_request_path()
 			if(len(i.get_request_body())>0):
-				cmd = auto+"python "+sqlmapPath+" -u "+url+dbms+" --beep --data \""+i.get_request_body()+"\" --cookie=\""+cookie+"\""
-				os.system(cmd)
-
+				if i.get_request_body() not in urls:
+					urls[i.get_request_body()]=cookie
 	if(i.get_request_method()=='POST'):	
 		if options.domain!=None:
 			if options.domain.lower() in i.host.lower():
@@ -78,8 +79,8 @@ for i in proxylog:
 					cookie=options.cookie
 				url = i.host+i.get_request_path()
 				if(len(i.get_request_body())>0):
-					cmd = auto+"python "+sqlmapPath+" -u "+url+dbms+" --beep --data \""+i.get_request_body()+"\" --cookie=\""+cookie+"\""
-					os.system(cmd)
+					if i.get_request_body() not in urls:
+						urls[i.get_request_body()]=cookie
 		else:
 			if options.cookie==None:
 				cookie=i.get_request_header('Cookie')
@@ -87,6 +88,9 @@ for i in proxylog:
 				cookie=options.cookie
 			url = i.host+i.get_request_path()
 			if(len(i.get_request_body())>0):
-				cmd = auto+"python "+sqlmapPath+" -u "+url+dbms+" --beep --data \""+i.get_request_body()+"\" --cookie=\""+cookie+"\""
-				os.system(cmd)
+				if i.get_request_body() not in urls:
+					urls[i.get_request_body()]=cookie
 
+for k, v in sorted(urls.items()):	
+	cmd = auto+"python "+sqlmapPath+" -u "+url+dbms+" --beep --data=\""+k+"\" --cookie=\""+v+"\""
+	os.system(cmd)
