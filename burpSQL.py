@@ -2,6 +2,7 @@
 import gds.pub.burp
 import os,sys
 from optparse import OptionParser
+from pprint import pprint
 import subprocess
 import signal
 
@@ -55,7 +56,7 @@ proxylog = gds.pub.burp.parse(options.filename)
 for i in proxylog:
 	if(i.get_request_method()=='GET'):
 		if options.domain!=None:
-			if options.domain.lower() in i.host.lower():
+			if str(options.domain.lower()) in str(i.host.lower()):
 				if options.cookie==None:
 					cookie=i.get_request_header('Cookie')
 				else:
@@ -64,6 +65,14 @@ for i in proxylog:
 				if(len(i.get_request_body())>0):
 					if i.get_request_body() not in urls:
 						urls[i.get_request_body()]=cookie
+					cmd = auto+" /usr/bin/python "+sqlmapPath+" -u \""+url+"\""+dbms+" --threads 4 --beep --data=\""+i.get_request_body()+"\" --cookie=\""+cookie+"\""
+					print cmd
+					subprocess.call(cmd,shell=True)
+				else:
+					cmd = auto+" /usr/bin/python "+sqlmapPath+" -u \""+url+"\""+dbms+" --threads 4 --beep --cookie=\""+cookie+"\""
+					print cmd
+					subprocess.call(cmd,shell=True)
+
 		else:
 			if options.cookie==None:
 				cookie=i.get_request_header('Cookie')
@@ -73,9 +82,18 @@ for i in proxylog:
 			if(len(i.get_request_body())>0):
 				if i.get_request_body() not in urls:
 					urls[i.get_request_body()]=cookie
+					cmd = auto+" /usr/bin/python "+sqlmapPath+" -u \""+url+"\""+dbms+" --threads 4 --beep --cookie=\""+cookie+"\""
+					print cmd
+					subprocess.call(cmd,shell=True)
+
+			else:
+				cmd = auto+" /usr/bin/python "+sqlmapPath+" -u \""+url+"\""+dbms+" --threads 4 --beep --cookie=\""+cookie+"\""
+				print cmd
+				subprocess.call(cmd,shell=True)
+
 	if(i.get_request_method()=='POST'):	
 		if options.domain!=None:
-			if options.domain.lower() in i.host.lower():
+			if str(options.domain.lower()) in str(i.host.lower()):
 				if options.cookie==None:
 					cookie=i.get_request_header('Cookie')
 				else:
@@ -84,6 +102,9 @@ for i in proxylog:
 				if(len(i.get_request_body())>0):
 					if i.get_request_body() not in urls:
 						urls[i.get_request_body()]=cookie
+						cmd = auto+" /usr/bin/python "+sqlmapPath+" -u \""+url+"\""+dbms+" --threads 4 --beep --data=\""+i.get_request_body()+"\" --cookie=\""+cookie+"\""
+						print cmd
+						subprocess.call(cmd,shell=True)
 		else:
 			if options.cookie==None:
 				cookie=i.get_request_header('Cookie')
@@ -93,7 +114,8 @@ for i in proxylog:
 			if(len(i.get_request_body())>0):
 				if i.get_request_body() not in urls:
 					urls[i.get_request_body()]=cookie
+					cmd = auto+" /usr/bin/python "+sqlmapPath+" -u \""+url+"\""+dbms+" --threads 4 --beep --data=\""+i.get_request_body()+"\" --cookie=\""+cookie+"\""
+					print cmd
+					subprocess.call(cmd,shell=True)
 
-for k, v in sorted(urls.items()):	
-	cmd = auto+" /usr/bin/python "+sqlmapPath+" -u \""+url+"\""+dbms+" --threads 4 --beep --data=\""+k+"\" --cookie=\""+v+"\""
-	subprocess.call(cmd,shell=True)
+
